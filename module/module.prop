@@ -1,0 +1,6 @@
+id=mt6893-spatial-audio
+name=MT6893 Spatial Audio
+version=1.0.0
+versionCode=100
+author=xCaptaiN09
+description=Exact-build wired and USB Spatial Audio integration for the supported MT6893 ColorOS port, using the original headphone tuning.

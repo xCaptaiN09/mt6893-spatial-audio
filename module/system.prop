@@ -1,0 +1,3 @@
+# Request Android's existing stereo-spatialization path. The compiled feature
+# flag and player/track eligibility still apply; this does not force it on.
+ro.audio.stereo_spatialization_enabled=true

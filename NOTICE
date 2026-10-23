@@ -1,0 +1,16 @@
+Project code/documentation: Muhammed Dilshad A (xCaptaiN09), MIT; see LICENSE.
+
+OEM assets retain their original ownership. The MIT license does not apply to:
+- module/system/odm/lib/*.so and module/system/odm/lib/soundfx/*.so;
+- module/system/odm/etc/spatializer/HP_*.bin;
+- original .so reference files under tools/reproduction/;
+- captured/derived OEM effect and policy configurations under module/system/
+  and tools/reproduction/policies/.
+
+No OEM redistribution license is asserted or granted by this project. These
+assets are supplied in this local compatibility-work bundle with pinned source
+provenance in module/SOURCES.txt and exact changes in docs/patches.json.
+
+Android interface/reference material is subject to its upstream license;
+module/APACHE-2.0.txt retains the applicable Apache 2.0 reference license text.
+KernelSU-Next and Magic Mount-rs are external dependencies, not bundled code.

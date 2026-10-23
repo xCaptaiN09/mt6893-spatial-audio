@@ -1,0 +1,9 @@
+{
+  "source_sha256": "30a2b8e85e30ed21585d24f4c56b29b08bbda121e2bad2be740ce336ad30053a",
+  "jar_sha256": "16255b82d018447a946f730c5e5f16a802458bff98d075b334531c64685535da",
+  "ecj_sha256": "cde026ff966b48b5e5f148b6f041ceff3cf4f85cf75155f4ec0f40e4ee14b545",
+  "r8_sha256": "900dfbc649519969fc5a4c7520d6b7355338e565fa1249874e0190b8d61b1199",
+  "java_target": "1.8",
+  "minimum_android_api": 23,
+  "purpose": "One 24-second 48 kHz PCM16 7.1.4 AUTO stream; no global policy controller."
+}

@@ -1,0 +1,38 @@
+MT6893 Spatial Audio | Source provenance
+
+Maintainer: Muhammed Dilshad A (xCaptaiN09)
+Project name: mt6893-spatial-audio
+Selected tuning: the original eight donor HP profiles used in module 0.6.
+
+Donor: OnePlus 12R CPH2585 / OP5D35L1, Android 15 firmware dump
+Repository: https://github.com/Jiovanni-dump/oneplus_op5d35l1_dump
+Pinned commit: 6c4375b5d3fab596f1ad3f42d92162de7fddf95e
+Paths:
+  odm/lib/liboplus_spat_audiox.so
+  odm/lib/libstdc++.so
+  odm/lib/soundfx/liboplus_spatializer.so
+  odm/etc/spatializer/HP_*.bin
+This donor is not Find X10 firmware. OEM libraries and tuning retain their
+original ownership; the repository MIT license does not cover OEM assets.
+
+The plugin repairs three log strings, two capability-dispatch instructions
+and its private support dependency name. The support ELF identity is renamed
+to libspstdc.so so the phone's existing libstdc++.so is preserved. Full input
+and output hashes and byte offsets are in the repository's docs/patches.json. The engine and all
+eight selected tuning profiles are unchanged donor bytes.
+
+The two exact policy captures and effect configurations came from the user's
+phone. Existing declarations and routing are retained; one Spatializer output
+and its wired/USB routes are added. The installer copies the phone's own exact
+libaudiopolicyextimpl.so and patches only the staged copy. The original phone
+library is not bundled. The original native enabled/off guard is unchanged.
+
+Interface and integration references:
+https://android.googlesource.com/platform/system/media/+/refs/heads/main/audio/include/system/audio_effects/effect_spatializer.h
+https://android.googlesource.com/platform/frameworks/av/+/refs/heads/main/services/audiopolicy/service/Spatializer.cpp
+https://source.android.com/docs/core/audio/spatial
+https://android.googlesource.com/platform/system/sepolicy/+/refs/heads/main/private/file_contexts
+https://github.com/Tools-cx-app/meta-magic_mount-rs/blob/v4.0.12/src/magic_mount.rs
+
+Keep the separate working MT6893 USB Audio Fix installed. This project does not
+replace the primary audio HAL, global C++ runtime or SELinux policy.

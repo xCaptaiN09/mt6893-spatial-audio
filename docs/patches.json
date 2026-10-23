@@ -1,0 +1,205 @@
+{
+  "purpose": "Exact-build Spatial Audio integration with the unchanged headphone tuning preferred in module 0.6.",
+  "original_sha256": "c45474870a468c69322dd6956bebd59aa80b9aa25e9d59910bd2eed613571420",
+  "patches": [
+    {
+      "file_offset": 7357,
+      "old": "%s mSession %p file %s not exist",
+      "new": "%s: room-model file missing"
+    },
+    {
+      "file_offset": 13273,
+      "old": "%s mSession %p file %s exist",
+      "new": "%s: room-model file loaded"
+    },
+    {
+      "file_offset": 14376,
+      "old": "%p Loading Parameter file %s failed, read length %d more than expected %d",
+      "new": "room-model read length mismatch"
+    }
+  ],
+  "limitations": [
+    "Validated on one Realme X7 Max ColorOS port; this is not a universal MT6893 or USB headphone module.",
+    "1.0.0 restores exact original 0.6 tuning and updates packaging/upgrade checks; this new package needs a phone smoke test after install.",
+    "Settings Original/off retains the inspected native disabled branch; complete connector/reconnect and player coverage remains unverified.",
+    "A stereo source has no independent height channels to recover; localization and perceived distance vary by listener.",
+    "No individualized HRTF, head tracker, extra radius or hall boost is added."
+  ],
+  "logging_patched_sha256": "1f26894db6263de581d50eff29a1e887ef428fddceae31bd0b8666e348dfc9c3",
+  "capability_input_sha256": "1f26894db6263de581d50eff29a1e887ef428fddceae31bd0b8666e348dfc9c3",
+  "capability_output_sha256": "794f872cd1f05c210dc4b8c785a3a09648240f52073d6c04be8e959dabcdc371",
+  "capability_dispatch_patches": [
+    {
+      "file_offset": 45816,
+      "virtual_address": 49912,
+      "old_hex": "0c208de2",
+      "new_hex": "0520a0e1",
+      "old_assembly": "add r2, sp, #12",
+      "new_assembly": "mov r2, r5",
+      "purpose": "Pass the original value-size output pointer to the existing doGetParam2 helper."
+    },
+    {
+      "file_offset": 45836,
+      "virtual_address": 49932,
+      "old_hex": "0100e0e3",
+      "new_hex": "0000a0e1",
+      "old_assembly": "mvn r0, #1",
+      "new_assembly": "mov r0, r0",
+      "purpose": "Keep the existing helper return status instead of overwriting it with -2."
+    }
+  ],
+  "private_support_packaging": {
+    "purpose": "Load the donor support library by a unique name without replacing the phone libstdc++.so.",
+    "old_dependency": "libstdc++.so",
+    "private_dependency": "libspstdc.so",
+    "plugin_input_sha256": "794f872cd1f05c210dc4b8c785a3a09648240f52073d6c04be8e959dabcdc371",
+    "plugin_output_sha256": "a048c6979fe6a7db56790f504a08489c6b32c9ad9c9c232ab0ddbbcba5ac0b2c",
+    "support_input_sha256": "9aa0c1963d0560014a6437b3e865b200e7980a00ba4e3208a3fdee39db455da0",
+    "support_output_sha256": "8ef9c073d7c3df43f1c4690524910d000595ff51e64bdf40a42421a1b8a86943",
+    "changes": [
+      {
+        "file": "plugin",
+        "file_offset": 2497,
+        "old_hex": "6c6962737464632b2b2e736f",
+        "new_hex": "6c69627370737464632e736f",
+        "purpose": "DT_NEEDED string"
+      },
+      {
+        "file": "support",
+        "file_offset": 1938,
+        "old_hex": "6c6962737464632b2b2e736f",
+        "new_hex": "6c69627370737464632e736f",
+        "purpose": "DT_SONAME and base-version name string"
+      },
+      {
+        "file": "support",
+        "file_offset": 1036,
+        "old_hex": "3f5f720d",
+        "new_hex": "efdf850d",
+        "purpose": "Base-version ELF hash for the renamed SONAME"
+      }
+    ],
+    "limits": [
+      "No code, data layout, symbol names, symbol-version names or processing parameters are changed.",
+      "The original phone libstdc++.so and libc++_shared.so are not mounted over.",
+      "The renamed pair loaded in the real MediaTek audio service in the 0.2 phone report."
+    ]
+  },
+  "policy_output_paths": [
+    {
+      "path": "/vendor/etc/audio_policy_configuration.xml",
+      "mix_port": "mt6893_spatializer",
+      "original_captured_sha256": "32c2b27f41a30ea02fb52a0c6fe56ba631db518a48f11d8c1f12624ed96ff7f9",
+      "original_without_trailing_newlines_sha256": "ccf868ee2f7a6a07a60b469c6a8a02d9aef51ce4e016e5259c2d39af1050c22c",
+      "test_sha256": "49fdbe4056a844a16720ebbf13b4faf14c2a57ae1e58b107f9f525d9996567d4",
+      "test_without_trailing_newlines_sha256": "3f520916e6c3a92734b6f7116017f3014786bb3646480d23c5886b083504d45b",
+      "flag": "AUDIO_OUTPUT_FLAG_SPATIALIZER",
+      "sample_rate": 48000,
+      "hal_format": "AUDIO_FORMAT_PCM_16_BIT",
+      "hal_channels": "AUDIO_CHANNEL_OUT_STEREO",
+      "sinks": [
+        "Wired Headset",
+        "Wired Headphones",
+        "USB Device Out",
+        "USB Headset Out"
+      ],
+      "reason": "Cover the original offload-disabled policy and its observed default-file fallback.",
+      "limits": [
+        "Only the two inspected exact policy bodies are accepted; final trailing newline count is ignored.",
+        "Keep original route sources, includes and volume tables.",
+        "New packaging does not establish additional device compatibility."
+      ]
+    },
+    {
+      "path": "/vendor/etc/audio_policy_configuration_a2dp_offload_disabled.xml",
+      "mix_port": "mt6893_spatializer",
+      "original_captured_sha256": "cd586cfa9b106d404184785e82bab2b4b37064b9e16148ed37b2cfc90e5c95ab",
+      "original_without_trailing_newlines_sha256": "be9bef2dc27610b4bbd81a879890641a4e0e28a7ba96b8e12c6706d2844bf974",
+      "test_sha256": "59d4070ea751b14f31f2b2da325573152a247115e1a502486cd7a610e8d0134c",
+      "test_without_trailing_newlines_sha256": "315d8a5b8761471c3ff715aece854de2358fa91b4bf288cbc0c771c39e972802",
+      "flag": "AUDIO_OUTPUT_FLAG_SPATIALIZER",
+      "sample_rate": 48000,
+      "hal_format": "AUDIO_FORMAT_PCM_16_BIT",
+      "hal_channels": "AUDIO_CHANNEL_OUT_STEREO",
+      "sinks": [
+        "Wired Headset",
+        "Wired Headphones",
+        "USB Device Out",
+        "USB Headset Out"
+      ],
+      "reason": "Cover the original offload-disabled policy and its observed default-file fallback.",
+      "limits": [
+        "Only the two inspected exact policy bodies are accepted; final trailing newline count is ignored.",
+        "Keep original route sources, includes and volume tables.",
+        "New packaging does not establish additional device compatibility."
+      ]
+    }
+  ],
+  "configuration_label_repair": {
+    "configuration_context": "u:object_r:vendor_configs_file:s0",
+    "library_context": "u:object_r:vendor_file:s0",
+    "system_extension_contexts": "Read original live file and directory labels, apply to staged copies and verify.",
+    "validation": "The supplied 0.6 and 0.8 reports show zero mount/context mismatches with SELinux enforcing."
+  },
+  "settings_activation": {
+    "source": "User-supplied mapped /system_ext/lib64/libaudiopolicyextimpl.so",
+    "original_sha256": "353066d5ff729e6e092b46a97e156aed10876322a5d0ed7b723b9bc301a6f389",
+    "patched_sha256": "0539b48b43c6a5dcb292f82c1861bc9f191590d46e664a4eb3238d3f282f4114",
+    "file_offset": 280068,
+    "virtual_address": 280068,
+    "old_hex": "b5000037",
+    "new_hex": "75000037",
+    "old_assembly": "tbnz w21, #0, 0x44618",
+    "new_assembly": "tbnz w21, #0, 0x44610",
+    "scope": "Wired/USB-available return path of needRestoreSpatializerOutput only. Other device branches are unchanged.",
+    "off_guard": "The inspected AudioPolicyService::doOnCheckSpatializer checks native Spatializer enabled before calling needRestoreSpatializerOutput; its disabled path sends spatializer_enable=off and detaches output.",
+    "install": "Hash-check, copy and patch only inside module staging; copy live system-extension labels and read them back.",
+    "stereo_request": "ro.audio.stereo_spatialization_enabled=true; the phone's compiled feature flag, format and player eligibility still apply.",
+    "limits": [
+      "USB stereo-song processing was confirmed in the supplied 0.6 phone report; 1.0.0 retains the exact activation bytes.",
+      "Other OEM uses of the headphone policy flag are not changed; reconnect and ongoing-player routing need testing.",
+      "Enabling native stereo eligibility does not recover independent surround/height objects from a stereo song.",
+      "No quality/tuning changes, ROOMMODEL substitutions or fabricated capabilities."
+    ]
+  },
+  "selected_tuning": {
+    "source_version": "0.6",
+    "extra_radius": false,
+    "angle_edits": false,
+    "baseline": "docs/tuning-baseline.json",
+    "upgrade_from": [
+      "Later updates within the mt6893-spatial-audio module ID",
+      "Exact earlier tuning hashes recognized for conflict verification; legacy module must first be removed and rebooted"
+    ],
+    "phone_feedback": "Listener preferred 0.6 and stopped further direction/distance experiments on 2026-10-23."
+  },
+  "validation": {
+    "usb_stereo_baseline": {
+      "report": "spatial-activation-20261023-121920.txt",
+      "module": "0.6",
+      "native_stereo": true,
+      "effect_enabled": true,
+      "processing_counter_advanced": true,
+      "profile": "HP_MUSIC_DIGITAL.bin"
+    },
+    "wired_multichannel_integration": {
+      "report": "spatial-radius-height-20261023-142127.txt",
+      "module": "0.8",
+      "route": "3.5 mm wired headphone",
+      "source_mask": "0x2d63f",
+      "effect_enabled": true,
+      "frames_submitted_and_played": 1152000,
+      "processing_counter": "128 through 512",
+      "tuning_scope": "Integration evidence only; the 0.8 radius tuning is not selected."
+    },
+    "raw_logs": "Not distributed in this project; see the concise docs/testing.md summary."
+  },
+  "release": {
+    "version": "1.0.0",
+    "module_id": "mt6893-spatial-audio",
+    "module_name": "MT6893 Spatial Audio",
+    "author": "xCaptaiN09",
+    "tuning": "Exact original donor bytes selected in v0.6",
+    "migration": "Remove legacy mt6893-spatializer-test and reboot before first install; later 1.x releases update in place."
+  }
+}
